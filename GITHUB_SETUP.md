@@ -24,12 +24,6 @@ Your GitHub repository has been created and configured! 🎉
 
 To enable full CI/CD functionality, you need to set these additional secrets:
 
-### Docker Hub (for container registry)
-```bash
-gh secret set DOCKER_USERNAME --body "your-docker-hub-username"
-gh secret set DOCKER_PASSWORD --body "your-docker-hub-token"
-```
-
 ### Database (for production deployment)
 ```bash
 gh secret set DATABASE_URL --body "postgresql://user:password@host:5432/database"
@@ -61,7 +55,7 @@ Runs on every push and PR:
 - **Linting**: ESLint for both frontend and backend
 - **Testing**: Jest (backend) and Vitest (frontend)
 - **Building**: TypeScript compilation and production builds
-- **Docker**: Multi-arch container builds
+- **Docker**: Container builds pushed to GitHub Container Registry (ghcr.io)
 - **Security**: Trivy vulnerability scanning
 
 ### 2. CodeQL Security (`.github/workflows/codeql.yml`)
@@ -175,10 +169,37 @@ Monitor your project with:
 4. Start developing your features!
 5. Set up monitoring and logging for production
 
+## 🐳 Docker Images
+
+Your application automatically builds and pushes Docker images to GitHub Container Registry:
+
+- **Backend**: `ghcr.io/tarpediem/fullstack-app/backend:latest`
+- **Frontend**: `ghcr.io/tarpediem/fullstack-app/frontend:latest`
+
+### Using the Images
+
+```bash
+# Pull and run production images
+docker pull ghcr.io/tarpediem/fullstack-app/backend:latest
+docker pull ghcr.io/tarpediem/fullstack-app/frontend:latest
+
+# Or use the production docker-compose
+docker-compose -f docker-compose.prod.yml up
+```
+
+### Image Visibility
+
+By default, GitHub Container Registry images are private. To make them public:
+1. Go to your repository
+2. Click "Packages" tab
+3. Select the package
+4. Go to "Package settings"
+5. Change visibility to "Public"
+
 ## 📝 Additional Resources
 
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [Docker Hub Setup](https://docs.docker.com/docker-hub/)
+- [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
 - [PostgreSQL Setup](https://www.postgresql.org/docs/)
 - [Redis Setup](https://redis.io/documentation)
 

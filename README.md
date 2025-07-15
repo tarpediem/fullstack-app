@@ -154,10 +154,10 @@ The project includes GitHub Actions workflows for:
 - **Deployment**: Automated deployment to staging and production
 
 Required GitHub Secrets:
-- `DOCKER_USERNAME`: Docker Hub username
-- `DOCKER_PASSWORD`: Docker Hub password/token
 - `DATABASE_URL`: Production database URL
-- `JWT_SECRET`: JWT signing secret
+- `JWT_SECRET`: JWT signing secret (automatically generated)
+
+Docker images are automatically built and pushed to GitHub Container Registry (ghcr.io) - no external registry credentials needed!
 
 ## 🧪 Testing
 
