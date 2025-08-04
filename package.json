@@ -11,30 +11,66 @@
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "npm run dev --workspace=backend",
     "dev:frontend": "npm run dev --workspace=frontend",
-    "build": "npm run build:backend && npm run build:frontend",
+    "build": "npm run build:clean && npm run build:backend && npm run build:frontend",
+    "build:clean": "npm run clean:backend && npm run clean:frontend",
     "build:backend": "npm run build --workspace=backend",
     "build:frontend": "npm run build --workspace=frontend",
+    "clean:backend": "rimraf backend/dist backend/coverage",
+    "clean:frontend": "rimraf frontend/dist frontend/coverage",
     "test": "npm run test:backend && npm run test:frontend",
     "test:backend": "npm run test --workspace=backend",
     "test:frontend": "npm run test --workspace=frontend",
+    "test:watch": "concurrently \"npm run test:watch --workspace=backend\" \"npm run test:watch --workspace=frontend\"",
+    "test:coverage": "npm run test:coverage:backend && npm run test:coverage:frontend",
+    "test:coverage:backend": "npm run test:coverage --workspace=backend",
+    "test:coverage:frontend": "npm run test:coverage --workspace=frontend",
     "lint": "npm run lint:backend && npm run lint:frontend",
+    "lint:fix": "npm run lint:fix:backend && npm run lint:fix:frontend",
     "lint:backend": "npm run lint --workspace=backend",
     "lint:frontend": "npm run lint --workspace=frontend",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
-    "prepare": "husky"
+    "lint:fix:backend": "npm run lint:fix --workspace=backend",
+    "lint:fix:frontend": "npm run lint:fix --workspace=frontend",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,yml,yaml}\"",
+    "typecheck": "npm run typecheck:backend && npm run typecheck:frontend",
+    "typecheck:backend": "npm run typecheck --workspace=backend",
+    "typecheck:frontend": "npm run typecheck --workspace=frontend",
+    "quality:check": "npm run typecheck && npm run lint && npm run format:check && npm run test:coverage && npm run security:audit",
+    "security:audit": "npm audit --audit-level moderate",
+    "security:audit:fix": "npm audit fix",
+    "deps:check": "npm outdated",
+    "deps:update": "npm update",
+    "deps:update:major": "npx npm-check-updates -u && npm install",
+    "validate": "npm run quality:check && npm run build",
+    "ci": "npm ci && npm run validate",
+    "prepare": "husky",
+    "postinstall": "npm run prepare"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
     "husky": "^9.1.7",
-    "lint-staged": "^16.0.1"
+    "lint-staged": "^16.0.1",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "prettier": "^3.1.0"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
+      "eslint --fix --max-warnings 0",
+      "prettier --write",
+      "git add"
     ],
-    "*.{json,css,md}": [
-      "prettier --write"
+    "*.{json,css,md,yml,yaml}": [
+      "prettier --write",
+      "git add"
+    ],
+    "package*.json": [
+      "npm audit --audit-level moderate",
+      "prettier --write",
+      "git add"
     ]
+  },
+  "commitlint": {
+    "extends": ["@commitlint/config-conventional"]
   }
 }
