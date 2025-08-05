@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
-    "@types/cheerio": "^0.22.35",
+    "@types/cheerio": "^1.0.0",
     "@types/compression": "^1.7.5",
     "@types/cookie-parser": "^1.4.6",
     "@types/cors": "^2.8.17",
